@@ -4,6 +4,9 @@ const DEVICE_NAME = "Samsung Remote PWA";
 
 const ui = {
   ip: document.querySelector("#tv-ip"),
+  ipLabel: document.querySelector('label[for="tv-ip"]'),
+  ipHelp: document.querySelector("#ip-help"),
+  connectRow: document.querySelector(".connect-row"),
   connect: document.querySelector("#connect-button"),
   forget: document.querySelector("#forget-button"),
   power: document.querySelector("#power-button"),
@@ -21,6 +24,17 @@ let paired = readPairing();
 let toastTimeout;
 let deferredInstallPrompt = null;
 let expiryTimer;
+const isAppleMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+  || navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1;
+
+if (isAppleMobile) {
+  ui.ipLabel.hidden = true;
+  ui.ipHelp.hidden = true;
+  ui.connectRow.hidden = true;
+  document.querySelector(".remote").hidden = true;
+  setStatus(false, "Requiere app nativa");
+  ui.message.textContent = "Este enlace abre la PWA antigua. En iPhone no puede descubrir la TV automáticamente: no escribas una IP aquí. La app nativa aún no está publicada.";
+}
 
 if (paired) ui.ip.value = paired.ip;
 renderPairing();
@@ -135,6 +149,10 @@ function makeSocket(ip, token) {
 }
 
 function connectToTv() {
+  if (isAppleMobile) {
+    ui.message.textContent = "No ingreses una IP. Abre la app nativa cuando esté disponible.";
+    return;
+  }
   expirePairingIfNeeded();
   const ip = ui.ip.value.trim();
   if (!isPrivateIPv4(ip)) {
