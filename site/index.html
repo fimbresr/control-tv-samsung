@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#171a19">
+    <meta name="description" content="Control remoto local para Samsung 7 Series. Diseñada para Chrome en Android y la red de la TV.">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' ws:; manifest-src 'self'; worker-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <link rel="icon" href="./icons/tv-remote.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./styles.css">
+    <title>Samsung Remote · Control local</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="./" aria-label="Samsung Remote, inicio">
+          <span class="brand-mark" aria-hidden="true">S</span>
+          <span>REMOTE <small>LOCAL CONTROL</small></span>
+        </a>
+        <button class="icon-button power" id="power-button" type="button" aria-label="Enviar tecla de encendido" title="Encendido / reposo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2v10M6.1 5.9a8 8 0 1 0 11.8 0"/></svg>
+        </button>
+      </header>
+
+      <section class="intro" aria-labelledby="page-title">
+        <p class="eyebrow"><span class="live-dot" id="status-dot"></span><span id="status-label">Sin conectar</span></p>
+        <h1 id="page-title">Tu sala,<br><em>a un toque.</em></h1>
+        <p class="lede">Samsung 7 Series <span>·</span> Chrome para Android</p>
+      </section>
+
+      <section class="pair-card" aria-label="Conexión con la televisión">
+        <div class="pair-heading">
+          <div>
+            <p class="eyebrow">01 / CONEXIÓN</p>
+            <h2 id="connection-title">Conecta con tu TV</h2>
+          </div>
+          <span class="network-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M2 8.8a15.4 15.4 0 0 1 20 0M5.5 12.3a10.1 10.1 0 0 1 13 0M9 15.8a4.8 4.8 0 0 1 6 0M12 19.5h.01"/></svg>
+          </span>
+        </div>
+        <label for="tv-ip">IP local de la televisión</label>
+        <div class="connect-row">
+          <input id="tv-ip" name="tv-ip" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="Ej. 192.168.1.42" aria-describedby="ip-help">
+          <button class="connect-button" id="connect-button" type="button"><span>Conectar</span><span aria-hidden="true">↗</span></button>
+        </div>
+        <p class="field-help" id="ip-help">En la TV: Configuración → General → Red → Estado de red. Usa la IP de la misma red.</p>
+        <p class="pair-message" id="pair-message" role="status" aria-live="polite">Chrome 154+ para Android · acepta la conexión en la TV cuando aparezca.</p>
+        <div class="session-row" id="session-row" hidden>
+          <span><span class="session-dot"></span>Autorización en este teléfono</span>
+          <span id="session-expiry"></span>
+        </div>
+      </section>
+
+      <section class="remote" aria-label="Controles del televisor">
+        <div class="remote-topline">
+          <p class="eyebrow">02 / CONTROL</p>
+          <button class="text-button" id="forget-button" type="button">Olvidar TV</button>
+        </div>
+
+        <div class="quick-controls">
+          <button class="quick-key" type="button" data-key="KEY_MUTE" aria-label="Silenciar"><span class="quick-icon mute-icon" aria-hidden="true">◖</span><span>Silencio</span></button>
+          <button class="quick-key" type="button" data-key="KEY_SOURCE" aria-label="Cambiar fuente"><span class="quick-icon" aria-hidden="true">▣</span><span>Fuente</span></button>
+          <button class="quick-key" type="button" data-key="KEY_HOME" aria-label="Inicio"><span class="quick-icon" aria-hidden="true">⌂</span><span>Inicio</span></button>
+        </div>
+
+        <div class="control-grid">
+          <div class="volume-control">
+            <p class="control-label">VOLUMEN</p>
+            <button class="round-key volume-key" type="button" data-key="KEY_VOLUP" aria-label="Subir volumen">+</button>
+            <span class="volume-word">VOL</span>
+            <button class="round-key volume-key" type="button" data-key="KEY_VOLDOWN" aria-label="Bajar volumen">−</button>
+          </div>
+
+          <div class="dpad" aria-label="Navegación">
+            <button class="dpad-key up" type="button" data-key="KEY_UP" aria-label="Arriba">⌃</button>
+            <button class="dpad-key left" type="button" data-key="KEY_LEFT" aria-label="Izquierda">‹</button>
+            <button class="dpad-key enter" type="button" data-key="KEY_ENTER" aria-label="Aceptar">OK</button>
+            <button class="dpad-key right" type="button" data-key="KEY_RIGHT" aria-label="Derecha">›</button>
+            <button class="dpad-key down" type="button" data-key="KEY_DOWN" aria-label="Abajo">⌄</button>
+          </div>
+
+          <div class="channel-control">
+            <p class="control-label">CANAL</p>
+            <button class="round-key channel-key" type="button" data-key="KEY_CHUP" aria-label="Subir canal">+</button>
+            <span class="channel-word">CH</span>
+            <button class="round-key channel-key" type="button" data-key="KEY_CHDOWN" aria-label="Bajar canal">−</button>
+          </div>
+        </div>
+
+        <div class="bottom-controls">
+          <button class="wide-key" type="button" data-key="KEY_RETURN"><span aria-hidden="true">↶</span> Regresar</button>
+          <button class="wide-key" type="button" data-key="KEY_MENU"><span aria-hidden="true">☰</span> Menú</button>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>HECHO PARA LA RED LOCAL</span>
+        <button class="text-button" id="install-button" type="button" hidden>Instalar app</button>
+      </footer>
+    </main>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
